@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "title": "Computadora de Escritorio",
+    "description": "Potente computadora para tareas intensivas",
+    "price": 3000,
+    "thumbnail": "imagen.png",
+    "code": "pc789",
+    "stock": 5
+  },
+  {
+    "id": 2,
+    "title": "Consola de Videojuegos",
+    "description": "Experimenta la última generación de entretenimiento interactivo",
+    "price": 400,
+    "thumbnail": "imagen.png",
+    "code": "cv123",
+    "stock": 10
+  },
+  {
+    "id": 3,
+    "title": "Cámara de Seguridad Inteligente",
+    "description": "Vigilancia avanzada para la seguridad de tu hogar u oficina",
+    "price": 150,
+    "thumbnail": "imagen.png",
+    "code": "csi456",
+    "stock": 8
+  },
+  {
+    "id": 4,
+    "title": "Auriculares Inalámbricos",
+    "description": "Sumérgete en un sonido nítido y sin cables molestos",
+    "price": 80,
+    "thumbnail": "imagen.png",
+    "code": "ai789",
+    "stock": 15
+  },
+  {
+    "id": 5,
+    "title": "Altavoz Bluetooth Resistente al Agua",
+    "description": "Disfruta de tu música incluso en entornos húmedos",
+    "price": 60,
+    "thumbnail": "imagen.png",
+    "code": "ab234",
+    "stock": 20
+  },
+  {
+    "id": 6,
+    "title": "Smartwatch con Monitor de Actividad",
+    "description": "Mantén un seguimiento completo de tu salud y actividad física",
+    "price": 120,
+    "thumbnail": "imagen.png",
+    "code": "sma567",
+    "stock": 5
+  },
+  {
+    "id": 7,
+    "title": "Impresora Multifuncional",
+    "description": "Solución completa para impresión, escaneo y copia en casa o la oficina",
+    "price": 200,
+    "thumbnail": "imagen.png",
+    "code": "im890",
+    "stock": 12
+  },
+  {
+    "id": 8,
+    "title": "Lámpara Inteligente",
+    "description": "Controla la iluminación de tu espacio con tu teléfono",
+    "price": 40,
+    "thumbnail": "imagen.png",
+    "code": "li123",
+    "stock": 18
+  },
+  {
+    "id": 9,
+    "title": "Teclado Mecánico para Gaming",
+    "description": "Precisión y respuesta táctil para una experiencia de juego superior",
+    "price": 100,
+    "thumbnail": "imagen.png",
+    "code": "tm456",
+    "stock": 7
+  },
+  {
+    "id": 10,
+    "title": "Monitor Curvo de Alta Resolución",
+    "description": "Sumérgete en imágenes nítidas y colores vibrantes",
+    "price": 300,
+    "thumbnail": "imagen.png",
+    "code": "mc789",
+    "stock": 9
+  }
+]
