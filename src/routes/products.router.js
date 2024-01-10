@@ -45,4 +45,45 @@ router.get("/products/:pid", async (req, res) => {
   }
 });
 
+// Ruta para agregar un nuevo producto
+router.post("/products", async (req, res) => {
+  try {
+    const productReq = req.body;
+    const product = await manager.addProduct(productReq);
+    res
+      .status(201)
+      .json({ message: "Producto agregado correctamente", product });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Ruta para actualizar un producto existente por su id
+router.put("/products/:pid", async (req, res) => {
+  try {
+    const id = parseInt(req.params.pid);
+    const productUpdate = await manager.updateProduct(id, req.body);
+    res.status(200).json({
+      message: "Producto actualizado correctamente",
+      product: productUpdate,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Ruta para eliminar un producto por su id
+router.delete("/products/:pid", async (req, res) => {
+  try {
+    const id = parseInt(req.params.pid);
+    const deletedProduct = await manager.deleteProductById(id);
+    res.status(200).json({
+      message: "Producto eliminado correctamente",
+      product: deletedProduct,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;

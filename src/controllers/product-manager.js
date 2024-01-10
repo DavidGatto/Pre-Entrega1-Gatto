@@ -1,7 +1,14 @@
 const fs = require("fs");
 
 class ProductManager {
-  static ultId = 0;
+  static lastId = 0;
+
+  async getLastId() {
+    const products = await this.readFile();
+    return products.length > 0
+      ? Math.max(...products.map((product) => product.id))
+      : 0;
+  }
 
   constructor(path) {
     this.products = [];
@@ -9,46 +16,60 @@ class ProductManager {
   }
 
   // Metodo para agregar un producto
-  async addProduct(newObj) {
-    let {
+  async addProduct(product) {
+    const {
       title,
       description,
       price,
+      status = true,
+      category,
+      thumbnail = "Sin imagen",
       code,
       stock,
-      category,
-      thumbnails = [],
-      status = true,
-    } = newObj;
+    } = product;
 
-    // Verificamos si todos los campos estan completos
-    if (!title || !description || !price || !code || !stock || !category) {
-      console.log("Por favor, completa todos los campos");
-      return;
+    this.products = await this.readFile();
+
+    // validamos que todos los campos sean obligatorios
+    if (
+      !title ||
+      !description ||
+      !price ||
+      !thumbnail ||
+      !code ||
+      !stock ||
+      !category
+    ) {
+      throw new Error("Todos los campos son obligatorios!!");
+    }
+    // validamos que el campo code no este repetido
+    if (this.products.some((product) => product.code === code)) {
+      throw new Error("El código debe ser único");
     }
 
-    // Verificamos si el codigo del producto es unico
-    if (this.products.some((item) => item.code === code)) {
-      console.log("El código debe ser único");
-      return;
-    }
+    // obtenemos el ultimo id y lo asignamos a la clase
+    const lastIdSaved = await this.getLastId();
+    ProductManager.lastId = lastIdSaved + 1;
 
-    // Creamos un nuevo producto con un id unico
+    // creamos productos para probar las clases
     const newProduct = {
-      id: ++ProductManager.ultId,
-      title,
-      description,
-      price: Number(price),
-      thumbnails,
-      code,
-      stock: Number(stock),
-      status,
-      category,
+      id: ProductManager.lastId,
+      title: title,
+      status: status,
+      category: category,
+      description: description,
+      price: price,
+      thumbnail: thumbnail,
+      code: code,
+      stock: stock,
     };
+
+    // agregamos el nuevo producto al array
     this.products.push(newProduct);
 
-    // Guardamos el array en el archivo
+    // agregamo el nuevo producto al archivo
     await this.saveToFile(this.products);
+    return newProduct;
   }
 
   getProducts() {

@@ -79,14 +79,5 @@
     "thumbnail": "imagen.png",
     "code": "tm456",
     "stock": 7
-  },
-  {
-    "id": 10,
-    "title": "Monitor Curvo de Alta Resolución",
-    "description": "Sumérgete en imágenes nítidas y colores vibrantes",
-    "price": 300,
-    "thumbnail": "imagen.png",
-    "code": "mc789",
-    "stock": 9
   }
 ]
