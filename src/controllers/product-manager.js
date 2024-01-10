@@ -10,10 +10,19 @@ class ProductManager {
 
   // Metodo para agregar un producto
   async addProduct(newObj) {
-    let { title, description, price, thumbnail, code, stock } = newObj;
+    let {
+      title,
+      description,
+      price,
+      code,
+      stock,
+      category,
+      thumbnails = [],
+      status = true,
+    } = newObj;
 
     // Verificamos si todos los campos estan completos
-    if (!title || !description || !price || !thumbnail || !code || !stock) {
+    if (!title || !description || !price || !code || !stock || !category) {
       console.log("Por favor, completa todos los campos");
       return;
     }
@@ -29,10 +38,12 @@ class ProductManager {
       id: ++ProductManager.ultId,
       title,
       description,
-      price,
-      thumbnail,
+      price: Number(price),
+      thumbnails,
       code,
-      stock,
+      stock: Number(stock),
+      status,
+      category,
     };
     this.products.push(newProduct);
 
