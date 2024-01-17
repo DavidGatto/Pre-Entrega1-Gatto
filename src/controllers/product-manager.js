@@ -72,8 +72,9 @@ class ProductManager {
     return newProduct;
   }
 
-  getProducts() {
-    console.log(this.products);
+  async getProducts() {
+    this.products = await this.readFile();
+    return this.products;
   }
 
   // Obtenemos un producto por su id

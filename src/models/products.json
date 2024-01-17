@@ -73,11 +73,24 @@
   },
   {
     "id": 9,
-    "title": "Teclado Mecánico para Gaming",
-    "description": "Precisión y respuesta táctil para una experiencia de juego superior",
-    "price": 100,
-    "thumbnail": "imagen.png",
-    "code": "tm456",
-    "stock": 7
+    "title": "Mouse inalambrico",
+    "status": true,
+    "category": "electronico",
+    "description": "muy bueno",
+    "price": "12222",
+    "thumbnail": "Sin imagen",
+    "code": "ads222",
+    "stock": "20"
+  },
+  {
+    "id": 10,
+    "title": "Iphone 15",
+    "status": true,
+    "category": "electronico",
+    "description": "El mejor celular",
+    "price": "100000",
+    "thumbnail": "Sin imagen",
+    "code": "cel3321",
+    "stock": "33"
   }
 ]

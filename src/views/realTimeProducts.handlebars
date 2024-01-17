@@ -1,0 +1,70 @@
+<h1>Products</h1>
+
+<div id="productsContainer"></div>
+
+<div class="container mt-5">
+  <h2>Add Product</h2>
+  <form>
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input type="text" class="form-control" id="title" placeholder="Title" />
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <input
+        type="text"
+        class="form-control"
+        id="description"
+        placeholder="Description"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="price" class="form-label">Price</label>
+      <input
+        type="number"
+        class="form-control"
+        id="price"
+        placeholder="Price"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="img" class="form-label">Image URL</label>
+      <input type="text" class="form-control" id="img" value="No Image" />
+    </div>
+    <div class="mb-3">
+      <label for="code" class="form-label">Code</label>
+      <input type="text" class="form-control" id="code" placeholder="Code" />
+    </div>
+    <div class="mb-3">
+      <label for="stock" class="form-label">Stock</label>
+      <input
+        type="number"
+        class="form-control"
+        id="stock"
+        placeholder="Stock"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="category" class="form-label">Category</label>
+      <input
+        type="text"
+        class="form-control"
+        id="category"
+        placeholder="Category"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="status" class="form-label">Status</label>
+      <select class="form-select" id="status">
+        <option value="true">Active</option>
+        <option value="false">Inactive</option>
+      </select>
+    </div>
+    <button type="button" class="btn btn-primary" id="btnSend">Send</button>
+  </form>
+</div>
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"
+></script>
+<script src="js/index.js"></script>
