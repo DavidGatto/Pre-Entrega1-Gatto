@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const ProductManager = require("../dao/fs/product-manager.js");
-const manager = new ProductManager("./src/models/products.json");
+const productManager = require("../dao/db/product-manager-db.js");
+const manager = new productManager();
 
 // Ruta para obtener todos los productos o una cantidad limitada
 router.get("/products", async (req, res) => {
   try {
     const limit = req.query.limit;
-    const products = await productManager.getProducts();
+    const products = await manager.getProducts();
     if (limit) {
       res.json(products.slice(0, limit));
     } else {
@@ -25,7 +25,7 @@ router.get("/products", async (req, res) => {
 // Ruta para obtener un producto por su id
 router.get("/products/:pid", async (req, res) => {
   try {
-    const pid = parseInt(req.params.pid);
+    const pid = req.params.pid;
 
     const search = await manager.getProductById(pid);
 

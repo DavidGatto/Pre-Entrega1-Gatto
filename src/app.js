@@ -23,6 +23,21 @@ app.engine("handlebars", exphbs.engine());
 app.set("view engine", "handlebars");
 app.set("views", "./src/views");
 
-app.listen(PUERTO, () => {
+const httpServer = app.listen(PUERTO, () => {
   console.log(`Servidor escuchando en el puerto ${PUERTO}`);
+});
+
+const MessageModel = require("./dao/models/message.model.js");
+const io = new socket.Server(httpServer);
+
+io.on("connection", (socket) => {
+  console.log("Nuevo usuario conectado");
+
+  socket.on("message", async (data) => {
+    await MessageModel.create(data);
+
+    const messages = await MessageModel.find();
+    console.log(messages);
+    io.sockets.emit("message", messages);
+  });
 });

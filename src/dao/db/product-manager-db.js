@@ -5,38 +5,36 @@ class ProductManager {
     title,
     description,
     price,
-    img,
+    status = true,
+    category,
+    thumbnails = "Sin imagen",
     code,
     stock,
-    category,
-    thumbnails,
   }) {
     try {
       if (!title || !description || !price || !code || !stock || !category) {
-        console.log("Todos los campos son obligatorios");
-        return;
+        throw new Error("Todos los campos son obligatorios");
       }
 
       const productExists = await ProductModel.findOne({ code: code });
 
       if (productExists) {
-        console.log("El codigo debe ser unico");
-        return;
+        throw new Error("El código debe ser único");
       }
 
       const newProduct = new ProductModel({
         title,
         description,
         price,
-        img,
+        thumbnails,
         code,
         stock,
         category,
         status: true,
-        thumbnails: thumbnails || [],
       });
 
       await newProduct.save();
+      return newProduct; // Devuelve el nuevo producto creado
     } catch (error) {
       console.log("Error al agregar el producto", error);
       throw error;
@@ -45,10 +43,22 @@ class ProductManager {
 
   async getProducts() {
     try {
+      console.log("Iniciando consulta de productos en la base de datos...");
+
       const products = await ProductModel.find();
+
+      if (products && products.length > 0) {
+        console.log("Productos encontrados:", products);
+      } else {
+        console.log("No se encontraron productos.");
+      }
+
+      console.log("Consulta de productos finalizada.");
+
       return products;
     } catch (error) {
       console.log("Error al obtener los productos", error);
+      throw error;
     }
   }
 
@@ -84,7 +94,7 @@ class ProductManager {
     }
   }
 
-  async deleteProduct(id) {
+  async deleteProductById(id) {
     try {
       const deleted = await ProductModel.findByIdAndDelete(id);
 

@@ -27,7 +27,7 @@ class CartManager {
 
   async addProductToCart(cartId, productId, quantity = 1) {
     try {
-      const cart = await this.getCarritoById(cartId);
+      const cart = await this.getCartById(cartId);
       const existeProducto = cart.products.find(
         (item) => item.product.toString() === productId
       );

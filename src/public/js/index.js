@@ -1,54 +1,36 @@
 const socket = io();
 
-socket.on("products", (data) => {
-  renderProducts(data);
+let user;
+const chatBox = document.getElementById("chatBox");
+
+Swal.fire({
+  title: "Nombre de usuario",
+  input: "text",
+  text: "Ingresa un nombre",
+  inputValidator: (value) => {
+    return !value && "Necesitas escribir un nombre para continuar";
+  },
+  allowOutsideClick: false,
+}).then((result) => {
+  user = result.value;
 });
 
-const renderProducts = (products) => {
-  const productsContainer = document.getElementById("productsContainer");
-  productsContainer.innerHTML = "";
+chatBox.addEventListener("keyup", (event) => {
+  if (event.key === "Enter") {
+    if (chatBox.value.trim().length > 0) {
+      socket.emit("message", { user: user, message: chatBox.value });
+      chatBox.value = "";
+    }
+  }
+});
 
-  products.forEach((item) => {
-    const card = document.createElement("div");
-    card.classList.add("card");
+socket.on("message", (data) => {
+  let log = document.getElementById("messagesLogs");
+  let messages = "";
 
-    card.innerHTML = `
-                <p>Id: ${item.id} </p>
-                <p>Title: ${item.title} </p>
-                <p>Price: ${item.price} </p>
-                <div >
-                <button><img class="w-50" src="https://res.cloudinary.com/duew1qr9a/image/upload/v1705527113/borrar_ztxwad.png" alt="Icono de Enviar"</button>
-                </div>
-        
-        `;
-    productsContainer.appendChild(card);
-
-    card.querySelector("button").addEventListener("click", () => {
-      deleteProduct(item.id);
-    });
-    card.querySelector("button").classList.add("w-4");
+  data.forEach((message) => {
+    messages = messages + `${message.user} dice: ${message.message} <br>`;
   });
-};
 
-const deleteProduct = (id) => {
-  socket.emit("deleteProduct", id);
-};
-
-document.getElementById("btnSend").addEventListener("click", () => {
-  addProduct();
+  log.innerHTML = messages;
 });
-
-const addProduct = () => {
-  const product = {
-    title: document.getElementById("title").value,
-    description: document.getElementById("description").value,
-    price: document.getElementById("price").value,
-    img: document.getElementById("img").value,
-    code: document.getElementById("code").value,
-    stock: document.getElementById("stock").value,
-    category: document.getElementById("category").value,
-    status: document.getElementById("status").value === "true",
-  };
-
-  socket.emit("addProduct", product);
-};
