@@ -28,6 +28,7 @@ const httpServer = app.listen(PUERTO, () => {
 });
 
 const MessageModel = require("./dao/models/message.model.js");
+const productModel = require("./dao/models/product.model.js");
 const io = new socket.Server(httpServer);
 
 io.on("connection", (socket) => {
@@ -41,3 +42,13 @@ io.on("connection", (socket) => {
     io.sockets.emit("message", messages);
   });
 });
+
+async function myFunction() {
+  const result = await productModel.paginate(
+    { category: "electronico" },
+    { limit: 5, page: 1 }
+  );
+  console.log(result);
+}
+
+myFunction();
