@@ -6,27 +6,32 @@ const manager = new productManager();
 
 router.get("/products", async (req, res) => {
   try {
-    const { limit = 10, page = 1, sort, query } = req.query;
-    let products;
-
-    if (query) {
-      products = await manager.getProductsByQuery(query);
-    } else {
-      products = await manager.getProducts();
+    let page = req.query.page;
+    const limit = req.query.limit || 2;
+    if (!page || isNaN(page)) {
+      page = 1;
     }
 
-    if (sort === "ascendente") {
-      products.sort((a, b) => a.price - b.price);
-    } else if (sort === "descendente") {
-      products.sort((a, b) => b.price - a.price);
-    }
+    const sort = req.query.sort || "";
+    const query = req.query.query || "";
 
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
+    const productsList = await manager.getProducts(limit, page, sort, query);
+    console.log(productsList);
 
-    const pageProducts = products.slice(startIndex, endIndex);
+    const productsFinal = productsList.docs.map((product) => {
+      const { _id, ...prod } = product.toObject();
+      return prod;
+    });
 
-    res.json(pageProducts);
+    res.render("products", {
+      products: productsFinal,
+      hasPrevPage: productsList.hasPrevPage,
+      hasNextPage: productsList.hasNextPage,
+      prevPage: productsList.prevPage,
+      nextPage: productsList.nextPage,
+      currentPage: productsList.page,
+      totalPages: productsList.totalPages,
+    });
   } catch (error) {
     console.error("Error al obtener productos", error);
     res.status(500).json({

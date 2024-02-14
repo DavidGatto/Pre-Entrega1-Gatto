@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const Cart = require("../dao/models/cart.model.js");
 
 const CartManager = require("../dao/db/cart-manager-db.js");
 
@@ -12,20 +13,24 @@ router.post("/carts", async (req, res) => {
     res.json(newCart);
   } catch (error) {
     console.error("Error del carrito", error);
-
-    res.json({ error: "Error del servidor" });
+    res.status(500).json({ error: "Error del servidor" });
   }
 });
 
-// Ruta para obtener un carrito específico por su ID
 router.get("/carts/:cid", async (req, res) => {
-  const cartId = req.params.cid;
   try {
-    const cart = await manager.getCartById(cartId);
-    res.json(cart.products);
+    const cartId = req.params.cid;
+    const { products } = await manager.getCartById(cartId);
+
+    // Convertir los ObjectIds a cadenas de texto
+    const productsWithStringsIds = products.map((product) => ({
+      quantity: product.quantity,
+      _id: product._id.toString(),
+    }));
+
+    res.render("carts", { cartId: cartId, products: productsWithStringsIds });
   } catch (error) {
-    console.error(`Error al obtener el carrito por ID ${cartId}`, error);
-    res.status(500).json({ error: "Error interno del servidor" });
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -44,6 +49,79 @@ router.post("/carts/:cid/product/:pid", async (req, res) => {
     res.json(updatedCart.products);
   } catch (error) {
     console.error("Error al agregar producto", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+});
+
+// Ruta para eliminar un producto de un carrito específico
+router.delete("/carts/:cid/products/:pid", async (req, res) => {
+  const { cid, pid } = req.params;
+
+  try {
+    const updatedCart = await Cart.findByIdAndUpdate(
+      cid,
+      { $pull: { products: { _id: pid } } },
+      { new: true }
+    );
+    res.json(updatedCart.products);
+  } catch (error) {
+    console.error("Error al eliminar producto del carrito", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+});
+
+// Ruta para actualizar el carrito con un arreglo de productos
+router.put("/carts/:cid", async (req, res) => {
+  const { cid } = req.params;
+  const { products } = req.body;
+
+  try {
+    const updatedCart = await Cart.findByIdAndUpdate(
+      cid,
+      { products },
+      { new: true }
+    );
+    res.json(updatedCart.products);
+  } catch (error) {
+    console.error("Error al actualizar el carrito", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+});
+
+// Ruta para actualizar la cantidad de ejemplares de un producto en un carrito específico
+router.put("/carts/:cid/products/:pid", async (req, res) => {
+  const { cid, pid } = req.params;
+  const { quantity } = req.body;
+
+  try {
+    const updatedCart = await Cart.findOneAndUpdate(
+      { _id: cid, "products._id": pid },
+      { $set: { "products.$.quantity": quantity } },
+      { new: true }
+    );
+    res.json(updatedCart.products);
+  } catch (error) {
+    console.error(
+      "Error al actualizar la cantidad del producto en el carrito",
+      error
+    );
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+});
+
+// Ruta para eliminar todos los productos de un carrito específico
+router.delete("/carts/:cid", async (req, res) => {
+  const { cid } = req.params;
+
+  try {
+    const updatedCart = await Cart.findByIdAndUpdate(
+      cid,
+      { products: [] },
+      { new: true }
+    );
+    res.json(updatedCart.products);
+  } catch (error) {
+    console.error("Error al eliminar todos los productos del carrito", error);
     res.status(500).json({ error: "Error interno del servidor" });
   }
 });

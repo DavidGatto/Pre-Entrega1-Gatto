@@ -34,47 +34,37 @@ class ProductManager {
       });
 
       await newProduct.save();
-      return newProduct; // Devuelve el nuevo producto creado
+      return newProduct;
     } catch (error) {
       console.log("Error al agregar el producto", error);
       throw error;
     }
   }
-
-  async getProducts() {
+  async getProducts(limit, page, sort, query) {
     try {
       console.log("Iniciando consulta de productos en la base de datos...");
 
-      const products = await ProductModel.find();
+      const options = {
+        limit: Number(limit) || 10,
+        page: Number(page) || 1,
+        sort:
+          sort === "desc"
+            ? { price: -1 }
+            : sort === "asc"
+            ? { price: 1 }
+            : { _id: 1 },
+      };
 
-      if (products && products.length > 0) {
-        console.log("Productos encontrados:", products);
-      } else {
-        console.log("No se encontraron productos.");
+      const filter = {};
+      if (query && query.category && typeof query.category === "string") {
+        filter.category = query.category;
       }
 
-      console.log("Consulta de productos finalizada.");
-
+      const products = await ProductModel.paginate(filter, options);
       return products;
     } catch (error) {
       console.log("Error al obtener los productos", error);
       throw error;
-    }
-  }
-
-  async getProductById(id) {
-    try {
-      const product = await ProductModel.findById(id);
-
-      if (!product) {
-        console.log("Producto no encontrado");
-        return null;
-      }
-
-      console.log("Producto encontrado");
-      return product;
-    } catch (error) {
-      console.log("Error al traer un producto por su id");
     }
   }
 
