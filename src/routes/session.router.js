@@ -23,7 +23,7 @@ router.post("/login", async (req, res) => {
           last_name: user.last_name,
           role: role,
         };
-        res.redirect("/profile");
+        res.redirect("/api/products");
       } else {
         res.status(403).send({ error: "Contraseña incorrecta" });
       }
@@ -39,7 +39,7 @@ router.get("/logout", (req, res) => {
   if (req.session.login) {
     req.session.destroy();
   }
-  res.status(200).send({ message: "logout correcto" });
+  res.redirect("/");
 });
 
 module.exports = router;

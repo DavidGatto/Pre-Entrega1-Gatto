@@ -1,6 +1,15 @@
-<h1 class="text-center">Lista de Productos</h1>
 <div class="d-flex flex-column justify-content-center align-items-center">
 
+  <h1>Welcome!, {{user.first_name}} {{user.last_name}}!</h1>
+
+  <div class="d-flex gap-4">
+
+    <p>Email: {{user.email}}</p>
+    <p>Age: {{user.age}}</p>
+    <p>Rol: {{user.role}}</p>
+  </div>
+  <a class="mb-3" href="/api/sessions/logout">Logout</a>
+  <h1 class="text-center">Product List</h1>
   {{#each products}}
     <div class="card" style="width: 18rem;">
       <img src="#" class="card-img-top" alt="" />

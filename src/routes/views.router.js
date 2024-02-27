@@ -24,6 +24,10 @@ router.get("/api/products", async (req, res) => {
       return prod;
     });
 
+    if (!req.session.login) {
+      return res.redirect("/");
+    }
+
     res.render("products", {
       products: productsFinal,
       hasPrevPage: productsList.hasPrevPage,
@@ -32,6 +36,7 @@ router.get("/api/products", async (req, res) => {
       nextPage: productsList.nextPage,
       currentPage: productsList.page,
       totalPages: productsList.totalPages,
+      user: req.session.user,
     });
   } catch (error) {
     console.error("Error al obtener productos", error);
@@ -57,9 +62,9 @@ router.get("/api/carts/:cid", async (req, res) => {
   }
 });
 
-router.get("/login", (req, res) => {
+router.get("/", (req, res) => {
   if (req.session.login) {
-    return res.redirect("/profile");
+    return res.redirect("/api/products");
   }
 
   res.render("login");
@@ -67,17 +72,9 @@ router.get("/login", (req, res) => {
 
 router.get("/register", (req, res) => {
   if (req.session.login) {
-    return res.redirect("/profile");
+    return res.redirect("/api/products");
   }
   res.render("register");
-});
-
-router.get("/profile", (req, res) => {
-  if (!req.session.login) {
-    return res.redirect("/login");
-  }
-
-  res.render("profile", { user: req.session.user });
 });
 
 module.exports = router;
