@@ -4,33 +4,16 @@ const Cart = require("../dao/models/cart.model.js");
 
 const CartManager = require("../dao/db/cart-manager-db.js");
 
-const manager = new CartManager();
+const managerc = new CartManager();
 
 // Ruta para crear un nuevo carrito
 router.post("/carts", async (req, res) => {
   try {
-    const newCart = await manager.createCart();
+    const newCart = await managerc.createCart();
     res.json(newCart);
   } catch (error) {
     console.error("Error del carrito", error);
     res.status(500).json({ error: "Error del servidor" });
-  }
-});
-
-router.get("/carts/:cid", async (req, res) => {
-  try {
-    const cartId = req.params.cid;
-    const { products } = await manager.getCartById(cartId);
-
-    // Convertir los ObjectIds a cadenas de texto
-    const productsWithStringsIds = products.map((product) => ({
-      quantity: product.quantity,
-      _id: product._id.toString(),
-    }));
-
-    res.render("carts", { cartId: cartId, products: productsWithStringsIds });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
   }
 });
 
@@ -41,7 +24,7 @@ router.post("/carts/:cid/product/:pid", async (req, res) => {
   const quantity = req.body.quantity || 1;
 
   try {
-    const updatedCart = await manager.addProductToCart(
+    const updatedCart = await managerc.addProductToCart(
       cartId,
       productId,
       quantity

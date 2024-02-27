@@ -4,42 +4,6 @@ const router = express.Router();
 const productManager = require("../dao/db/product-manager-db.js");
 const manager = new productManager();
 
-router.get("/products", async (req, res) => {
-  try {
-    let page = req.query.page;
-    const limit = req.query.limit || 2;
-    if (!page || isNaN(page)) {
-      page = 1;
-    }
-
-    const sort = req.query.sort || "";
-    const query = req.query.query || "";
-
-    const productsList = await manager.getProducts(limit, page, sort, query);
-    console.log(productsList);
-
-    const productsFinal = productsList.docs.map((product) => {
-      const { _id, ...prod } = product.toObject();
-      return prod;
-    });
-
-    res.render("products", {
-      products: productsFinal,
-      hasPrevPage: productsList.hasPrevPage,
-      hasNextPage: productsList.hasNextPage,
-      prevPage: productsList.prevPage,
-      nextPage: productsList.nextPage,
-      currentPage: productsList.page,
-      totalPages: productsList.totalPages,
-    });
-  } catch (error) {
-    console.error("Error al obtener productos", error);
-    res.status(500).json({
-      error: "Error interno del servidor",
-    });
-  }
-});
-
 // Ruta para obtener un producto por su id
 router.get("/products/:pid", async (req, res) => {
   try {
