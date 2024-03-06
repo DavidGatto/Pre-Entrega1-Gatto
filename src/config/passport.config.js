@@ -1,12 +1,8 @@
 const passport = require("passport");
 const local = require("passport-local");
-
-//Traemos el UserModel y las funciones de bcrypt
+const GitHubStrategy = require("passport-github2");
 const UserModel = require("../dao/models/user.model.js");
 const { createHash, isValidPassword } = require("../utils/hashBcrypt.js");
-
-//Passport con GitHub:
-const GitHubStrategy = require("passport-github2");
 
 const LocalStrategy = local.Strategy;
 
@@ -94,6 +90,39 @@ passport.use(
             first_name: profile._json.name,
             last_name: "",
             age: 36,
+            email: profile._json.email,
+            password: "",
+          };
+          let result = await UserModel.create(newUser);
+          done(null, result);
+        } else {
+          done(null, user);
+        }
+      } catch (error) {
+        return done(error);
+      }
+    }
+  )
+);
+
+passport.use(
+  "github",
+  new GitHubStrategy(
+    {
+      clientID: "Iv1.caf76c8e55053c67",
+      clientSecret: "3966f68d3000c3d13fd683283e895fec74849ffb",
+      callbackURL: "http://localhost:8080/api/sessions/githubcallback",
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      console.log("Profile: ", profile);
+      try {
+        let user = await UserModel.findOne({ email: profile._json.email });
+
+        if (!user) {
+          let newUser = {
+            first_name: profile._json.name,
+            last_name: "",
+            age: 21,
             email: profile._json.email,
             password: "",
           };

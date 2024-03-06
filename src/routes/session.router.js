@@ -80,4 +80,20 @@ router.get("/faillogin", async (req, res) => {
   res.send({ error: "Error al iniciar sesion" });
 });
 
+router.get(
+  "/github",
+  passport.authenticate("github", { scope: ["user:email"] }),
+  async (req, res) => {}
+);
+
+router.get(
+  "/githubcallback",
+  passport.authenticate("github", { failureRedirect: "/login" }),
+  async (req, res) => {
+    req.session.user = req.user;
+    req.session.login = true;
+    res.redirect("/api/preoducts");
+  }
+);
+
 module.exports = router;
