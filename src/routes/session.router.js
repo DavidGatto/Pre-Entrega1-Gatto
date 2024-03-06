@@ -45,18 +45,28 @@ router.get("/logout", (req, res) => {
 
 router.post(
   "/login",
-  passport.authenticate("login", { failureRedirect: "/faillogin" }),
+  passport.authenticate("login", {
+    failureRedirect: "/faillogin",
+  }),
+
   async (req, res) => {
     if (!req.user)
       return res
         .status(400)
         .send({ status: "error", message: "Datos incorrectos" });
 
+    let role = "usuario";
+
+    if (req.user.email === "adminCoder@coder.com") {
+      role = "admin";
+    }
+
     req.session.user = {
       first_name: req.user.first_name,
       last_name: req.user.last_name,
       age: req.user.age,
       email: req.user.email,
+      role: role,
     };
 
     req.session.login = true;
@@ -66,8 +76,8 @@ router.post(
 );
 
 router.get("/faillogin", async (req, res) => {
-  console.log("Error al iniciar sesión");
-  res.send({ error: "Error al iniciar sesión" });
+  console.log("Error al iniciar sesion");
+  res.send({ error: "Error al iniciar sesion" });
 });
 
 module.exports = router;
