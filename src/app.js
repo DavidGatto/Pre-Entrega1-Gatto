@@ -4,6 +4,8 @@ const MongoStore = require("connect-mongo");
 const app = express();
 const exphbs = require("express-handlebars");
 const socket = require("socket.io");
+const passport = require("passport");
+const initializePassport = require("./config/passport.config.js");
 const PUERTO = 8080;
 require("./database.js");
 
@@ -28,6 +30,10 @@ app.use(
     }),
   })
 );
+
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 //Routes
 app.use("/api", productsRouter);
