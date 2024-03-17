@@ -92,8 +92,16 @@ router.get(
   async (req, res) => {
     req.session.user = req.user;
     req.session.login = true;
-    res.redirect("/api/preoducts");
+    res.redirect("/api/products");
   }
 );
+
+router.get("/current", (req, res) => {
+  if (req.session.user) {
+    res.render("current", { user: req.session.user });
+  } else {
+    res.redirect("/");
+  }
+});
 
 module.exports = router;
