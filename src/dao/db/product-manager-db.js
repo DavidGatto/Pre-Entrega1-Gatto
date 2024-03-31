@@ -68,6 +68,22 @@ class ProductManager {
     }
   }
 
+  async getProductById(req, res) {
+    const pid = req.params.pid;
+
+    try {
+      const prod = await ProductModel.getProductById(pid);
+      const error = { Error: "No se encontró el producto" };
+      if (prod) {
+        res.json(prod);
+      } else {
+        res.json({ error });
+      }
+    } catch (error) {
+      res.status(500).json({ msg: "Error  del servidor" });
+    }
+  }
+
   async updateProduct(id, updatedProduct) {
     try {
       const updated = await ProductModel.findByIdAndUpdate(id, updatedProduct);
